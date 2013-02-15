@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="MVCFramework.Model.Entities" assembly="MVCFramework.Model" auto-import="false">
+
+  <class name="NavigationItem" table="NavigationItem">
+
+    <id name="ID" column="NavigationItemID">
+      <generator class="identity"></generator>
+    </id>
+
+    <property name="Text" />
+    <property name="Url" />
+    <property name="Icon" />
+    <property name="ShowInMenu"/>
+    <property name="Order" column="[Order]" />
+
+    <many-to-one name="Navigation" column="NavigationID" />
+
+  </class>
+
+</hibernate-mapping>

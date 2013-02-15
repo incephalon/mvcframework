@@ -1,0 +1,45 @@
+﻿@model MVCFramework.Web.Models.UserProfileModel
+<div class="row-fluid">
+    <div class="span2"><i class="icon-user icon-4x img-polaroid"></i></div>
+    <div class="span5">
+        <h3>@Model.FirstName @Model.LastName</h3>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="offset2"><strong>Address</strong></div>
+</div>
+<div class="row-fluid">
+    <div class="offset2 span5">@Model.Address</div>
+    <div class="span5">@Model.City @Model.State @Model.Country @Model.Zip</div>
+</div>
+<div class="row-fluid">
+    <br />
+</div>
+<div class="row-fluid">
+    <div class="offset2"><strong>Contact</strong></div>
+</div>
+<div class="row-fluid">
+    <div class="offset2 span5">@Model.Email</div>
+    <div class="span2">@Model.Phone</div>
+    <div class="span3">@Model.Mobile</div>
+</div>
+<div class="row-fluid">
+    <br />
+</div>
+<div class="row-fluid">
+    <div class="offset2"><strong>Bio</strong></div>
+</div>
+<div class="row-fluid">
+    <div class="offset2 span10">@Model.Description</div>
+</div>
+<div class="row-fluid">
+    <br />
+</div>
+<div class="row-fluid">
+    <div class="offset2">
+        @Ajax.ActionLink("edit", "EditUserProfile", "Account",null, new AjaxOptions()
+                                                                   {
+                                                                       UpdateTargetId = "profile-container"
+                                                                   }, new { @class = "btn-link" })
+    </div>
+</div>

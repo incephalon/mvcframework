@@ -1,0 +1,22 @@
+﻿@model MVCFramework.Web.Models.LogOnModel
+@using (Ajax.BeginForm("LogOn", "Account",
+        new { ReturnUrl = Request.QueryString["ReturnUrl"] },
+        new AjaxOptions()
+            {
+                LoadingElementId = "login-preloader",
+                OnSuccess = "redirect_from_login"
+            },
+        new { @class = "form-inline" }))
+{
+    <img id="login-preloader" src="~/Content/images/loaders/bullets-blue.gif" class="hide" />
+    @Html.TextBoxFor(m => m.UserName, new { @class = "input-small", @placeholder = "user or email" })
+    @:&nbsp;
+    @Html.PasswordFor(m => m.Password, new { @class = "input-small", @placeholder = "password" })
+    
+    <input type="submit" class="btn-link" value="login" />
+  
+    @Html.ActionLink("register", "Register", "Account",null, new {@class="btn btn-link"})
+}
+
+
+

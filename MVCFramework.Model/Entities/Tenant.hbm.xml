@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="MVCFramework.Model.Entities" assembly="MVCFramework.Model" auto-import="false">
+
+  <class name="Tenant" table="Tenant">
+
+    <id name="ID" column="TenantUID">
+      <generator class="guid"></generator>
+    </id>
+
+    <property name="Name"/>
+
+    <many-to-one name="Portal" unique="true" column="TenantUID" />
+
+  </class>
+
+</hibernate-mapping>

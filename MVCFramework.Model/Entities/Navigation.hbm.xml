@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="MVCFramework.Model.Entities" assembly="MVCFramework.Model" auto-import="false">
+
+  <class name="Navigation" table="Navigation">
+
+    <id name="ID" column="NavigationID">
+      <generator class="identity"></generator>
+    </id>
+
+    <property name="Name" />
+    <property name="IsDefault"/>
+
+    <bag  name="Items" cascade="save-update" inverse="true" lazy="false" fetch="join">
+      <key column="NavigationID"/>
+      <one-to-many class="NavigationItem"/>
+    </bag>
+
+  </class>
+
+</hibernate-mapping>

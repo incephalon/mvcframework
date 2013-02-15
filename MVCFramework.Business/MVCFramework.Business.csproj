@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0E2AB387-66BF-410F-84D1-5EF834B746E3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MVCFramework.Business</RootNamespace>
+    <AssemblyName>MVCFramework.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="HibernatingRhinos.Profiler.Appender">
+      <HintPath>..\packages\NHibernateProfiler.2.0.2128.0\lib\HibernatingRhinos.Profiler.Appender.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.0.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.0.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage">
+      <HintPath>..\packages\WindowsAzure.Storage.2.0.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.3.2.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Spatial, Version=5.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.0.2\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConfigurationKeys.cs" />
+    <Compile Include="Exceptions\BusinessException.cs" />
+    <Compile Include="Exceptions\ExceptionType.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\NamingConventionHelper.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="Helpers\UrlHelper.cs" />
+    <Compile Include="Modules\NHibernateRepositoryModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\Caching\CacheProviderBase.cs" />
+    <Compile Include="Providers\Caching\CacheProviderCollection.cs" />
+    <Compile Include="Providers\Configuration\DatabaseSettingsProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Configuration\FileSettingsProvider.cs" />
+    <Compile Include="Providers\Configuration\FileSettingsProviderModel.cs" />
+    <Compile Include="Providers\Configuration\SettingsProviderBase.cs" />
+    <Compile Include="Providers\Configuration\SettingsProviderCollection.cs" />
+    <Compile Include="Providers\Configuration\SettingsProviderManager.cs" />
+    <Compile Include="Providers\Encryption\EncryptionProviderBase.cs" />
+    <Compile Include="Providers\Encryption\TripleDESEncryptionProvider.cs" />
+    <Compile Include="Providers\Logging\Elmah\AzureTableStorageErrorLog.cs" />
+    <Compile Include="Providers\Logging\Log4net\AzureTableStorageAppender.cs" />
+    <Compile Include="Providers\Logging\Log4net\Logger.cs" />
+    <Compile Include="Providers\Logging\Azure\AzureLogEntry.cs" />
+    <Compile Include="Providers\Logging\Azure\LogServiceContext.cs" />
+    <Compile Include="Providers\Logging\ILogEntry.cs" />
+    <Compile Include="Providers\Logging\LoggingProviderBase.cs" />
+    <Compile Include="Providers\Logging\LoggingProviderCollection.cs" />
+    <Compile Include="Providers\Logging\LoggingProviderManager.cs" />
+    <Compile Include="Providers\Mail\IMailServiceProvider.cs" />
+    <Compile Include="Providers\Mail\MailServiceProviderBase.cs" />
+    <Compile Include="Providers\Mail\MailServiceProviderCollection.cs" />
+    <Compile Include="Providers\Mail\MailServiceProviderManager.cs" />
+    <Compile Include="Providers\Mail\SMTPMailServiceProvider.cs" />
+    <Compile Include="Providers\Membership\MultiTenantProfileProvider.cs" />
+    <Compile Include="Providers\Navigation\DatabaseNavigationProvider.cs" />
+    <Compile Include="Providers\Navigation\NavigationProviderBase.cs" />
+    <Compile Include="Providers\Navigation\NavigationProviderCollection.cs" />
+    <Compile Include="Providers\Navigation\NavigationProviderManager.cs" />
+    <Compile Include="Providers\ProviderConfiguration.cs" />
+    <Compile Include="Providers\Caching\CacheProviderManager.cs" />
+    <Compile Include="Providers\Caching\WebCacheProvider.cs" />
+    <Compile Include="Providers\Membership\MultiTenantMembershipProvider.cs" />
+    <Compile Include="Providers\Membership\MultiTenantRoleProvider.cs" />
+    <Compile Include="Providers\NHibernateSession\NHibernateSessionProvider.cs" />
+    <Compile Include="Providers\Portal\IPortalProvider.cs" />
+    <Compile Include="Providers\Portal\PortalProvider.cs" />
+    <Compile Include="Providers\Storage\AccessPolicy.cs" />
+    <Compile Include="Providers\Storage\AzureStorageProvider.cs" />
+    <Compile Include="Providers\Storage\IQueueMessage.cs" />
+    <Compile Include="Providers\Storage\StorageProviderBase.cs" />
+    <Compile Include="Providers\Storage\StorageProviderCollection.cs" />
+    <Compile Include="Providers\Storage\StorageProviderManager.cs" />
+    <Compile Include="Repository\Entities\ConfigurationRepository.cs" />
+    <Compile Include="Repository\Entities\NavigationRepository.cs" />
+    <Compile Include="Repository\Entities\PortalRepository.cs" />
+    <Compile Include="Repository\Entities\RoleRepository.cs" />
+    <Compile Include="Repository\Entities\UserRepository.cs" />
+    <Compile Include="Repository\IKeyedRepository.cs" />
+    <Compile Include="Repository\IReadOnlyRepository.cs" />
+    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Providers\NHibernateSession\IUnitOfWork.cs" />
+    <Compile Include="Providers\NHibernateSession\UnitOfWork.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MVCFramework.Model\MVCFramework.Model.csproj">
+      <Project>{3207288b-0dd7-465b-b0a1-d643fd7efc8d}</Project>
+      <Name>MVCFramework.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

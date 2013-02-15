@@ -1,0 +1,39 @@
+﻿@model MVCFramework.Web.Models.RegisterModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/Layouts/Master.cshtml";
+}
+
+@section subheader{
+    <div class="well">
+        <h2>Register</h2>
+        <p>On this page you can register a new user for the current portal.</p>
+    </div>
+}
+
+<div class="container-fluid span9 well">
+    @using (Ajax.BeginForm("Register", "Account", new AjaxOptions()
+                                                      {
+                                                          LoadingElementId = "register-preloader",
+                                                          OnSuccess = "redirect_from_login"
+                                                      }))
+    {
+        <label><strong>User information</strong></label>
+        <div class="controls controls-row">
+            @Html.TextBoxFor(m => m.UserName, new { placeholder = "user name", @class = "span4" })
+            @Html.PasswordFor(m => m.Password, new { placeholder = "password", @class = "span4" })
+            @Html.PasswordFor(m => m.ConfirmPassword, new { placeholder = "confirm password", @class = "span4" })
+        </div>
+        
+        <label><strong>Personal information</strong></label>
+        <div class="controls controls-row">
+            @Html.TextBoxFor(m => m.Email, new { placeholder = "email", @class = "span4" })
+            @Html.TextBoxFor(m => m.FirstName, new { placeholder = "first name", @class = "span4" })
+            @Html.TextBoxFor(m => m.LastName, new { placeholder = "last name", @class = "span4" })
+        </div>
+        
+        <input type="submit" class="btn-link" value="register" />
+        <img id="register-preloader" src="~/Content/images/loaders/bullets-blue.gif" class="hide" />
+    }
+
+</div>

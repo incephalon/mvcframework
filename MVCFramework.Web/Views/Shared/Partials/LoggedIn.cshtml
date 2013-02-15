@@ -1,0 +1,5 @@
+﻿<div class="pull-right">
+    logged in as @Html.ActionLink(@User.Identity.Name, "UserProfile", "Account")
+    <span>-</span>
+    <a href="@Url.Action("LogOff", "Account")">sign out</a>
+</div>

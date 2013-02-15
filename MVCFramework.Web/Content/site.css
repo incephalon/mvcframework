@@ -1,0 +1,30 @@
+﻿
+/* Validation helpers */
+
+.field-validation-error {
+   
+}
+
+.field-validation-valid {
+   
+}
+
+input.input-validation-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.validation-summary-errors {
+ 
+}
+
+.validation-summary-valid {
+   
+}
+
+/* Custom fonts */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "pt-sans-narrow";
+}

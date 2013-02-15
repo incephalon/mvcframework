@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/content/site.css" rel="stylesheet" media="screen" />
+
+    @RenderSection("styles", false)
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            @RenderSection("header")
+        </div>
+        @RenderBody()
+    </div>
+    <script type="text/javascript" src="//use.typekit.net/vpe1ljt.js"></script>
+    <script type="text/javascript">try { Typekit.load(); } catch (e) { }</script>
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/utils.js"></script>
+    <script src="~/Scripts/ajax-messages.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

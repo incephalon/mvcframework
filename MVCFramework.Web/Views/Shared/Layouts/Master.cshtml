@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "~/Views/Shared/Layouts/Base.cshtml";
+}
+
+@section header
+{
+    <h1>MVC framework<small> everything you need to start your project</small></h1>
+    <div class="ajax-message">
+    </div>
+    <ul class="breadcrumb pull-left">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li><a href="#">Library</a> <span class="divider">/</span></li>
+        <li class="active">Data</li>
+    </ul>
+    <div id="login-container" class="pull-right">
+        @(Request.IsAuthenticated ? Html.Partial("Partials/LoggedIn") : Html.Partial("Partials/LogOn"))
+    </div>
+}
+@RenderSection("subheader", false)
+<div class="row-fluid">
+    @if (IsSectionDefined("navigation"))
+    {
+        @RenderSection("navigation", false)
+    }
+    else
+    {
+        @Html.Partial("Partials/Navigation")
+    }
+
+    @RenderBody()
+</div>
