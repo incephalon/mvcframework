@@ -1,5 +1,6 @@
 *.suo
 *.user
+*.dbml
 packages
 bin
 obj
