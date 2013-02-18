@@ -68,12 +68,13 @@
     <Build Include="Tables\Portal.sql" />
     <Build Include="Tables\PortalAlias.sql" />
     <Build Include="Tables\UserProfile.sql" />
-    <Build Include="Tables\UserTenantRole.sql" />
     <Build Include="Tables\NavigationItem.sql" />
     <Build Include="Tables\Navigation.sql" />
     <Build Include="Tables\ConfigurationSetting.sql" />
     <Build Include="Tables\ConfigurationSection.sql" />
     <Build Include="Tables\Configuration.sql" />
+    <Build Include="Tables\UserRole.sql" />
+    <Build Include="Tables\UserRole.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DatabaseToProject.scmp" />
