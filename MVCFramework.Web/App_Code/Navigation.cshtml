@@ -1,22 +1,22 @@
 ﻿@using MVCFramework.Web.Models
-@helper RenderNavigation(NavigationModel navigation)
+@helper RenderNavigation(NavigationModel navigation, System.Web.Mvc.UrlHelper Url)
 {
     <ul class="nav nav-list">
         @{ 
             foreach (var item in navigation.Items.Where(i => i.ParentID == null).OrderBy(i => i.Order))
             {
            
-            @RenderNavigationItem(item)
+            @RenderNavigationItem(item, Url)
             foreach (var subitem in navigation.Items.Where(si => si.ParentID != null && si.ParentID == item.ID))
             {
-                @RenderNavigationItem(subitem)
+                @RenderNavigationItem(subitem, Url)
             }
             
             }
         }
     </ul>
 }
-@helper RenderNavigationItem(NavigationItemModel item)
+@helper RenderNavigationItem(NavigationItemModel item, System.Web.Mvc.UrlHelper Url)
 {
     if (!item.ShowInMenu)
     {
@@ -34,7 +34,7 @@
     
         if (!string.IsNullOrEmpty(item.Url))
         {
-            @:<a href="@item.Url">
+            @:<a href="@Url.Content(item.Url)">
         }
             if (!string.IsNullOrEmpty(item.Icon))
             {

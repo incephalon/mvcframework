@@ -2,7 +2,16 @@
 <div class="span3">
     @{
         var defaultNavigationModel = NavigationModelFactory.GetDefaultNavigationModel();
-        var navigationModel = defaultNavigationModel;
-        @Navigation.RenderNavigation(navigationModel)
+        if (Request.IsAuthenticated)
+        {
+            var userRolesNavigations = NavigationModelFactory.GetNavigationModel(HttpContext.Current.User.Identity.Name);
+            foreach (var userNavigationModel in userRolesNavigations)
+            {
+                NavigationModelFactory.MergeNavigationModels(userNavigationModel, defaultNavigationModel);
+            }
+
+        }
+      
+        @Navigation.RenderNavigation(defaultNavigationModel, Url)
     }
 </div>
