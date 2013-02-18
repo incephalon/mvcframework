@@ -37,20 +37,6 @@ namespace MVCFramework.Business.Providers.Membership
             }
         }
 
-        private PortalProvider _portalProvider;
-        private PortalProvider PortalProvider
-        {
-            get
-            {
-                if (_portalProvider == null)
-                {
-                    _portalProvider = new PortalProvider();
-                    _portalProvider.Initialize(ApplicationName, ConfigurationKeys.PortalCache.ToString());
-                }
-                return _portalProvider;
-            }
-        }
-
         public string ConnectionName { get; set; }
         
         public override void Initialize(string name, System.Collections.Specialized.NameValueCollection config)
@@ -108,13 +94,13 @@ namespace MVCFramework.Business.Providers.Membership
         {
             //TODO: we should cache user roles per portal once he logs in, and remove them once he logs out
 
-            return RoleRepository.GetUserRoles(username, PortalProvider.GetCurrentPortal().Tenant.ID)
+            return RoleRepository.GetUserRoles(username, PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID)
                 .ToArray();
         }
 
         public override bool IsUserInRole(string username, string rolename)
         {
-            return RoleRepository.IsUserInRole(username, PortalProvider.GetCurrentPortal().Tenant.ID, rolename);
+            return RoleRepository.IsUserInRole(username, PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID, rolename);
         }
 
         #region not implemented

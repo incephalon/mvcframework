@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using System.Web.Security;
 
 namespace MVCFramework.Tests
@@ -15,7 +16,11 @@ namespace MVCFramework.Tests
         [Test]
         public void GetUserRoles()
         {
-            Roles.GetRolesForUser("roxi");
+            var roles = Roles.GetRolesForUser("roxi");
+            foreach (var role in roles)
+            {
+                Console.WriteLine(role);
+            }
         }
     }
 }

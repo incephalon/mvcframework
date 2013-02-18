@@ -238,6 +238,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\site.css" />
+    <Content Include="App_Code\Navigation.cshtml" />
     <None Include="Configuration\Web.connections.config" />
     <Content Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Content\font\fontawesome-webfont.ttf" />

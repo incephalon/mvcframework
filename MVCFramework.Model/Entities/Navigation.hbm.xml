@@ -8,7 +8,8 @@
     </id>
 
     <property name="Name" />
-    <property name="IsDefault"/>
+    <many-to-one name="Tenant" column="TenantUID" />
+    <many-to-one name="Role" column="RoleUID" />
 
     <bag  name="Items" cascade="save-update" inverse="true" lazy="false" fetch="join">
       <key column="NavigationID"/>

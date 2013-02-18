@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Web;
 using MVCFramework.Business.Exceptions;
 using System;
 using MVCFramework.Business.Providers.NHibernateSession;
@@ -27,24 +28,9 @@ namespace MVCFramework.Business.Providers.Navigation
                     return host;
                 }
 
-                throw new ArgumentNullException("ApplicationName", "Could not determine the application name for the membership provider.");
+                throw new ArgumentNullException("ApplicationName", "Could not determine the application name for the navigation provider.");
             }
             set { _applicationName = value; }
-        }
-
-
-        private PortalProvider _portalProvider;
-        private PortalProvider PortalProvider
-        {
-            get
-            {
-                if (_portalProvider == null)
-                {
-                    _portalProvider = new PortalProvider();
-                    _portalProvider.Initialize(ApplicationName, ConfigurationKeys.PortalCache.ToString());
-                }
-                return _portalProvider;
-            }
         }
 
         private NavigationRepository NavigationRepository
@@ -52,18 +38,41 @@ namespace MVCFramework.Business.Providers.Navigation
             get { return new NavigationRepository(NHibernateSessionProvider.Instance.CurrentSession); }
         }
 
-        public override Model.Entities.Navigation GetNavigation()
+        public override void Initialize(string name, System.Collections.Specialized.NameValueCollection config)
         {
-            var navigation = NavigationRepository.GetDefaultNavigation(PortalProvider.GetCurrentPortal().Tenant.ID);
+            if (config == null)
+                throw new ArgumentException("config");
+
+            if (string.IsNullOrEmpty(name))
+                name = "DatabaseNavigationProvider";
+
+            if (string.IsNullOrEmpty(config["description"]))
+            {
+                config.Remove("description");
+                config.Add("description", "Database navigation provider");
+            }
+
+            base.Initialize(name, config);
+
+            string applicationName = config["applicationName"];
+
+            if (!string.IsNullOrEmpty(applicationName))
+                ApplicationName = applicationName;
+        }
+
+        public override Model.Entities.Navigation GetDefaultNavigation()
+        {
+            var navigation = NavigationRepository.GetDefaultNavigation(PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID);
+          
             if (navigation == null)
                 throw new BusinessException("Default navigation is not defined.");
 
             return navigation;
         }
 
-        public override Model.Entities.Navigation GetNavigation(string username, string portal)
+        public override List<Model.Entities.Navigation> GetUserNavigations(string username)
         {
-            var navigation = NavigationRepository.GetNavigation(username, PortalProvider.GetCurrentPortal().Tenant.ID);
+            var navigation = NavigationRepository.GetUserNavigations(username, PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID);
 
             return navigation;
         }

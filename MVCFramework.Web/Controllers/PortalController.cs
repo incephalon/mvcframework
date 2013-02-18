@@ -1,9 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
-using MVCFramework.Business;
 using MVCFramework.Business.Providers.Logging;
 using MVCFramework.Business.Providers.Portal;
 
@@ -11,9 +8,6 @@ namespace MVCFramework.Web.Controllers
 {
     public class PortalController : Controller
     {
-        
-        readonly IPortalProvider _portalProvider;
-
         /// <summary>
         /// Returns the logged-in user ID. 
         /// Returns -1 if no user is logged in or an error occurs while retrieving the logged in user's ID.
@@ -53,23 +47,6 @@ namespace MVCFramework.Web.Controllers
             return LogEntry(message, exception, source, type, code);
         }
 
-
-        protected PortalController(PortalProvider portalProvider)
-        {
-            _portalProvider = portalProvider;
-        }
-
-        protected PortalController(IPortalProvider portalProvider)
-        {
-            _portalProvider = portalProvider;
-        }
-
-        protected override void Initialize(RequestContext requestContext)
-        {
-            InitializePortalProvider(requestContext.HttpContext, ConfigurationKeys.PortalCache.ToString());
-            base.Initialize(requestContext);
-        }
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             ViewBag.Portal = Portal;
@@ -84,7 +61,7 @@ namespace MVCFramework.Web.Controllers
         {
             get
             {
-                return _portalProvider.GetCurrentPortal();
+                return PortalProviderManager.Provider.GetCurrentPortal();
             }
         }
 
@@ -99,16 +76,6 @@ namespace MVCFramework.Web.Controllers
                 viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
-        }
-
-        internal void InitializePortalProvider(HttpContextBase httpContext, string cacheKey)
-        {
-            // get the request host
-            string host = httpContext.Request.Headers["Host"];
-            host = host.Split(':')[0]; // removes port from host
-            host = host.Replace("www.", string.Empty); // removes www. from host
-
-            _portalProvider.Initialize(host, cacheKey);
         }
     }
 }

@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MultiTenantDatabaseNavigationProviderSpecs.cs" />
     <Compile Include="MultiTenantMembershipProviderSpecs.cs" />
     <Compile Include="MultiTenantRoleProviderSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

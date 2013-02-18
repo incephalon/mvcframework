@@ -14,6 +14,7 @@
     <property name="Order" column="[Order]" />
 
     <many-to-one name="Navigation" column="NavigationID" />
+    <many-to-one name="ParentItem" column="ParentItemID" />
 
   </class>
 

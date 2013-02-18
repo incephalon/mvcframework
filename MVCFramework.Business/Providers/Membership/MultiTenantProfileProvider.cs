@@ -38,20 +38,6 @@ namespace MVCFramework.Business.Providers.Membership
 
         public string ConnectionName { get; set; }
 
-        private PortalProvider _portalProvider;
-        private PortalProvider PortalProvider
-        {
-            get
-            {
-                if (_portalProvider == null)
-                {
-                    _portalProvider = new PortalProvider();
-                    _portalProvider.Initialize(ApplicationName, ConfigurationKeys.PortalCache.ToString());
-                }
-                return _portalProvider;
-            }
-        }
-
         private UserRepository UserRepository
         {
             get { return new UserRepository(NHibernateSessionProvider.Instance.CurrentSession); }
@@ -134,7 +120,7 @@ namespace MVCFramework.Business.Providers.Membership
                 throw new ProviderException("Anonymous profile data is not supported by this profile provider.");
 
             Guid userID; // the user's unique identifier for this profile, if found - not used further
-            var profile = UserRepository.GetProfileByUserName(username, PortalProvider.GetCurrentPortal().Tenant.ID, out userID);
+            var profile = UserRepository.GetProfileByUserName(username, PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID, out userID);
 
             SettingsPropertyValueCollection result = new SettingsPropertyValueCollection();
 
@@ -161,7 +147,7 @@ namespace MVCFramework.Business.Providers.Membership
                 throw new ProviderException("Anonymous profile data is not supported by this profile provider.");
 
             Guid userID; // the user's unique identifier for this profile
-            var profile = UserRepository.GetProfileByUserName(username, PortalProvider.GetCurrentPortal().Tenant.ID, out userID);
+            var profile = UserRepository.GetProfileByUserName(username, PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID, out userID);
 
             if (userID == default (Guid))
                 throw new ProviderException(string.Format("The specified user does not exist: {0}", username));

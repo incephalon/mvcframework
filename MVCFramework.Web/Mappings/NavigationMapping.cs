@@ -11,7 +11,7 @@ namespace MVCFramework.Web.Mappings
         {
             Mapper
                 .CreateMap<NavigationItem, NavigationItemModel>()
-               
+                .ForMember(m => m.ParentID, o => o.MapFrom(s => s.ParentItem.ID))
                 .IgnoreAllNonExisting();
 
             Mapper

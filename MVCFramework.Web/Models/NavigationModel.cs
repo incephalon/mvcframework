@@ -21,27 +21,28 @@ namespace MVCFramework.Web.Models
         public int? ParentID { get; set; }
 
         public string Text { get; set; }
-        public string URL { get; set; }
-        public bool Selected { get; set; }
+        public string Url { get; set; }
+        public string Icon { get; set; }
         public int Order { get; set; }
         public bool ShowInMenu { get; set; }
 
+        public bool Selected { get; set; }
     }
 
     public sealed class NavigationModelFactory
     {
         public static NavigationModel GetDefaultNavigationModel()
         {
-            Navigation defaultNavigation = NavigationProviderManager.Provider.GetNavigation();
+            Navigation defaultNavigation = NavigationProviderManager.Provider.GetDefaultNavigation();
             NavigationModel model = Mapper.Map<Navigation, NavigationModel>(defaultNavigation);
 
             return model;
         }
 
-        public static NavigationModel GetNavigationModel(string username, string portal)
+        public static List<NavigationModel> GetNavigationModel(string username)
         {
-            Navigation navigation = NavigationProviderManager.Provider.GetNavigation(username, portal);
-            NavigationModel model = Mapper.Map<Navigation, NavigationModel>(navigation);
+            var navigation = NavigationProviderManager.Provider.GetUserNavigations(username);
+            var model = Mapper.Map<List<Navigation>, List<NavigationModel>>(navigation);
 
             return model;
         }

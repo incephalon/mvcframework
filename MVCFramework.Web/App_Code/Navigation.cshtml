@@ -1,0 +1,49 @@
+﻿@using MVCFramework.Web.Models
+@helper RenderNavigation(NavigationModel navigation)
+{
+    <ul class="nav nav-list">
+        @{ 
+            foreach (var item in navigation.Items.Where(i => i.ParentID == null).OrderBy(i => i.Order))
+            {
+           
+            @RenderNavigationItem(item)
+            foreach (var subitem in navigation.Items.Where(si => si.ParentID != null && si.ParentID == item.ID))
+            {
+                @RenderNavigationItem(subitem)
+            }
+            
+            }
+        }
+    </ul>
+}
+@helper RenderNavigationItem(NavigationItemModel item)
+{
+    if (!item.ShowInMenu)
+    {
+        return;
+    }
+    
+    if (item.ParentID == null)
+    {
+        @:<li class="nav-header">
+    }
+    else
+    {
+        @:<li>
+    }
+    
+        if (!string.IsNullOrEmpty(item.Url))
+        {
+            @:<a href="@item.Url">
+        }
+            if (!string.IsNullOrEmpty(item.Icon))
+            {
+                  <i class="@item.Icon"></i>
+            }
+            @item.Text
+        if (!string.IsNullOrEmpty(item.Url))
+        {
+          @:</a>
+        }
+    @:</li>
+}

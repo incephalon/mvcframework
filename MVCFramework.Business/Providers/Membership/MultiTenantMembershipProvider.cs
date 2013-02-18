@@ -54,20 +54,6 @@ namespace MVCFramework.Business.Providers.Membership
             get { return new UserRepository(NHibernateSessionProvider.Instance.CurrentSession); }
         }
 
-        private PortalProvider _portalProvider;
-        private PortalProvider PortalProvider
-        {
-            get
-            {
-                if (_portalProvider == null)
-                {
-                    _portalProvider = new PortalProvider();
-                    _portalProvider.Initialize(ApplicationName, ConfigurationKeys.PortalCache.ToString());
-                }
-                return _portalProvider;
-            }
-        }
-
         #region Provider settings
 
         private bool _enablePasswordReset = false;
@@ -325,7 +311,7 @@ namespace MVCFramework.Business.Providers.Membership
 
             bool isValid = false;
 
-            var portal = PortalProvider.GetCurrentPortal();
+            var portal = PortalProviderManager.Provider.GetCurrentPortal();
 
             if (portal == null)
                 return false;
@@ -369,7 +355,7 @@ namespace MVCFramework.Business.Providers.Membership
                 else
                     throw new MembershipPasswordException("Change password canceled due to new password validation failure.");
 
-            var portal = PortalProvider.GetCurrentPortal();
+            var portal = PortalProviderManager.Provider.GetCurrentPortal();
 
             try
             {
@@ -385,7 +371,7 @@ namespace MVCFramework.Business.Providers.Membership
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            var portal = PortalProvider.GetCurrentPortal();
+            var portal = PortalProviderManager.Provider.GetCurrentPortal();
 
             if (portal == null)
                 throw new ProviderException("Failed to retrieve user. Unknown portal.");
@@ -442,7 +428,7 @@ namespace MVCFramework.Business.Providers.Membership
                     return null;
                 }
 
-                Tenant t = PortalProvider.GetCurrentPortal().Tenant;
+                Tenant t = PortalProviderManager.Provider.GetCurrentPortal().Tenant;
                 User u = new User(t, username, email, EncodePassword(password)) { Enabled = isApproved };
 
                 var userID = UserRepository.Insert(u);

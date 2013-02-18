@@ -1,6 +1,6 @@
 *.suo
 *.user
-*.dbml
+*.dbmdl
 packages
 bin
 obj
