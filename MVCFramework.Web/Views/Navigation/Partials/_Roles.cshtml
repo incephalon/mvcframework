@@ -1,0 +1,16 @@
+﻿<h3>Roles</h3>
+
+<ul class="nav nav-tabs nav-stacked">
+    @{
+        <li><a href="#">anonymous</a></li>
+        foreach (var role in Roles.GetAllRoles())
+        {
+        <li>
+            <a href="#">
+                @role
+            </a>
+        </li>
+        }
+        
+    }
+</ul>

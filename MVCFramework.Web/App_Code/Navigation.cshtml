@@ -1,7 +1,7 @@
 ﻿@using MVCFramework.Web.Models
-@helper RenderNavigation(NavigationModel navigation, System.Web.Mvc.UrlHelper Url)
+@helper RenderNavigation(NavigationModel navigation, System.Web.Mvc.UrlHelper Url, string css = "nav nav-list")
 {
-    <ul class="nav nav-list">
+    <ul class="@css">
         @{ 
             foreach (var item in navigation.Items.Where(i => i.ParentID == null).OrderBy(i => i.Order))
             {

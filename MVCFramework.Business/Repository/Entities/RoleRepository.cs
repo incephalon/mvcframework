@@ -42,5 +42,18 @@ namespace MVCFramework.Business.Repository.Entities
 
             return uid != default(Guid);
         }
+
+        public IList<string> GetAllRoles(Guid tenantID)
+        {
+            BeginTransaction();
+            var rq = from role in All()
+                     where role.Tenant.ID == tenantID
+                     select role.Name;
+
+            var roles = rq.ToList();
+            CommitTransaction();
+
+            return roles;
+        }
     }
 }

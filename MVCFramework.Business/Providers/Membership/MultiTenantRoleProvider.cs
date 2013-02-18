@@ -38,7 +38,7 @@ namespace MVCFramework.Business.Providers.Membership
         }
 
         public string ConnectionName { get; set; }
-        
+
         public override void Initialize(string name, System.Collections.Specialized.NameValueCollection config)
         {
             if (config == null)
@@ -103,6 +103,12 @@ namespace MVCFramework.Business.Providers.Membership
             return RoleRepository.IsUserInRole(username, PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID, rolename);
         }
 
+        public override string[] GetAllRoles()
+        {
+            return RoleRepository.GetAllRoles(PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID)
+                .ToArray();
+        }
+
         #region not implemented
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
@@ -125,10 +131,7 @@ namespace MVCFramework.Business.Providers.Membership
             throw new NotImplementedException();
         }
 
-        public override string[] GetAllRoles()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public override string[] GetUsersInRole(string roleName)
         {

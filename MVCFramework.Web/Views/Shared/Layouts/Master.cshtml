@@ -16,6 +16,7 @@
         @(Request.IsAuthenticated ? Html.Partial("Partials/LoggedIn") : Html.Partial("Partials/LogOn"))
     </div>
 }
+
 @RenderSection("subheader", false)
 <div class="row-fluid">
     @if (IsSectionDefined("navigation"))
@@ -29,3 +30,5 @@
 
     @RenderBody()
 </div>
+
+ 

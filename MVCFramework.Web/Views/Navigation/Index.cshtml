@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Layouts/Master.cshtml";
+}
+
+@section subheader{
+    <div class="well">
+        <h2>Navigation</h2>
+        <p>On this page you can manage the navigation for this portal.</p>
+    </div>
+}
+<div class="span3">
+    @Html.Partial("Partials/_Roles")
+</div>
+<div class="span6">
+  @Html.Partial("Partials/_Navigation")
+</div>
+
