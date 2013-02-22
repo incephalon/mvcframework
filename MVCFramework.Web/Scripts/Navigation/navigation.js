@@ -52,6 +52,14 @@ NavigationItemView = Backbone.View.extend({
         this.$el.html($content);
         this.$el.attr("id", "navigation-item-" + this.model.id);
 
+        if (isEditing) {
+            // apply form validation
+            var $form = this.$el.find('form');
+            $form.data("unobtrusiveValidation", null);
+            $form.data("validator", null);
+            $.validator.unobtrusive.parse($form);
+        }
+
         return this;
     },
 
@@ -79,13 +87,18 @@ NavigationItemView = Backbone.View.extend({
     },
 
     save: function (e) {
+        e.preventDefault();
+        
+        var $form = this.$el.find('form');
+        if (!$form.valid())
+            return;
+        
         this.model.set({
             Icon: this.$('#item-icon').val(),
             Text: this.$('#item-text').val(),
-            Url: this.$('#item-url').val()
+            Url: this.$('#item-url').val(),
+            isEditing: false
         });
-        this.model.set({ isEditing: false });
-        e.preventDefault();
     },
     
     delete: function(e) {
