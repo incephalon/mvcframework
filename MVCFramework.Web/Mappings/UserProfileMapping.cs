@@ -10,9 +10,6 @@ namespace MVCFramework.Web.Mappings
         {
             Mapper.CreateMap<ProfileBase, UserProfileModel>()
                   .ForAllMembers(m => m.ResolveUsing<ProfileValueResolver>());
-
-            //Mapper.CreateMap<UserProfileModel, ProfileBase>()
-            //      .ConvertUsing<ProfileTypeConverter>();
         }
 
 
@@ -26,14 +23,5 @@ namespace MVCFramework.Web.Mappings
                 );
             }
         }
-
-        //public class ProfileTypeConverter : ITypeConverter<UserProfileModel, ProfileBase>
-        //{
-        //    public ProfileBase Convert(ResolutionContext context)
-        //    {
-        //        var profile = (ProfileBase) context.DestinationValue;
-        //        return profile;
-        //    }
-        //}
     }
 }

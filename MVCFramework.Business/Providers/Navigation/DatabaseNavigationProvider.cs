@@ -63,10 +63,16 @@ namespace MVCFramework.Business.Providers.Navigation
         public override Model.Entities.Navigation GetDefaultNavigation()
         {
             var navigation = NavigationRepository.GetDefaultNavigation(PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID);
-          
+
             if (navigation == null)
                 throw new BusinessException("Default navigation is not defined.");
 
+            return navigation;
+        }
+
+        public override Model.Entities.Navigation GetRoleNavigation(string role)
+        {
+            var navigation = NavigationRepository.GetRoleNavigation(role, PortalProviderManager.Provider.GetCurrentPortal().Tenant.ID);
             return navigation;
         }
 

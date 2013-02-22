@@ -2,17 +2,37 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/Layouts/Master.cshtml";
 }
-
+@section scripts{
+    <script src="~/Scripts/underscore.min.js"></script>
+    <script src="~/Scripts/backbone.min.js"></script>
+    <script src="~/Scripts/Navigation/roles.js"></script>
+    <script src="~/Scripts/Navigation/navigation.js"></script>
+    <script src="~/Scripts/Navigation/router.js"></script>
+}
 @section subheader{
     <div class="well">
         <h2>Navigation</h2>
         <p>On this page you can manage the navigation for this portal.</p>
     </div>
 }
-<div class="span3">
-    @Html.Partial("Partials/_Roles")
+<div class="span3" id="roles-region">
 </div>
-<div class="span6">
-  @Html.Partial("Partials/_Navigation")
+<div class="span6" id="navigation-region">
+    <div class="well">Please select a role to manage its navigation...</div>
 </div>
 
+<script id="roles-template" type="text/html">
+    @Html.Partial("Partials/_Roles")
+</script>
+<script id="role-template" type="text/html">
+    @Html.Partial("Partials/_Role")
+</script>
+<script id="navigation-template" type="text/html">
+    @Html.Partial("Partials/_Navigation")
+</script>
+<script id="navigation-item-template" type="text/html">
+    @Html.Partial("Partials/_NavigationItem")
+</script>
+<script id="navigation-item-edit-template" type="text/html">
+    @Html.Partial("Partials/_NavigationItemEdit")
+</script>

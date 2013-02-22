@@ -15,8 +15,8 @@ namespace MVCFramework.Web.Mappings
                 .IgnoreAllNonExisting();
 
             Mapper
-                .CreateMap<Navigation, NavigationModel>();
-
+                .CreateMap<Navigation, NavigationModel>()
+                .ForMember(m => m.Role, o => o.MapFrom(s => s.Role.Name));
         }
     }
 }

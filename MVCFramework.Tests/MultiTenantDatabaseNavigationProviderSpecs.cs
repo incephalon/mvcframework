@@ -15,9 +15,17 @@ namespace MVCFramework.Tests
         [Test]
         public void GetUserNavigation()
         {
-            var navs = NavigationProviderManager.Provider.GetUserNavigations("roxi");
+            var navs = NavigationProviderManager.Provider.GetUserNavigations("master");
             Assert.AreEqual(navs.Count, 2);
         }
+
+        [Test]
+        public void GetRoleNavigation()
+        {
+            var nav = NavigationProviderManager.Provider.GetRoleNavigation("administrator");
+            Assert.IsNotNull(nav);
+        }
+
 
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using MVCFramework.Web.Helpers;
+using MVCFramework.Web.Infrastructure;
+using System.Web.Mvc;
 
 namespace MVCFramework.Web.Controllers
 {
@@ -11,6 +13,15 @@ namespace MVCFramework.Web.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public JsonNetResult GetNavigationForRole(string role)
+        {
+            var model = role == "anonymous" 
+                ? NavigationModelHelper.GetDefaultNavigationModel()
+                : NavigationModelHelper.GetRoleNavigationModel(role);
+
+            return new JsonNetResult(model.Items);
         }
 
     }

@@ -8,6 +8,7 @@
     </id>
 
     <property name="Name" />
+    
     <many-to-one name="Tenant" column="TenantUID" />
     <many-to-one name="Role" column="RoleUID" />
 

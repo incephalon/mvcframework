@@ -145,12 +145,14 @@ namespace MVCFramework.Web.Controllers
         }
         #endregion
 
+        [Authorize]
         public ActionResult UserProfile()
         {
             var model = Mapper.Map<ProfileBase, UserProfileModel>(Profile);
             return View(model);
         }
 
+        [Authorize]
         public ActionResult EditUserProfile()
         {
             var model = Mapper.Map<ProfileBase, UserProfileModel>(Profile);
@@ -158,6 +160,7 @@ namespace MVCFramework.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult EditUserProfile(UserProfileModel model)
         {
             try

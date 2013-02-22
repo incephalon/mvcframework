@@ -1,13 +1,13 @@
-﻿@using MVCFramework.Web.Models
+﻿@using MVCFramework.Web.Helpers
 <div class="span3">
     @{
-        var defaultNavigationModel = NavigationModelFactory.GetDefaultNavigationModel();
+        var defaultNavigationModel = NavigationModelHelper.GetDefaultNavigationModel();
         if (Request.IsAuthenticated)
         {
-            var userRolesNavigations = NavigationModelFactory.GetNavigationModel(HttpContext.Current.User.Identity.Name);
+            var userRolesNavigations = NavigationModelHelper.GetUserNavigationModels(HttpContext.Current.User.Identity.Name);
             foreach (var userNavigationModel in userRolesNavigations)
             {
-                NavigationModelFactory.MergeNavigationModels(userNavigationModel, defaultNavigationModel);
+                NavigationModelHelper.MergeNavigationModels(userNavigationModel, defaultNavigationModel);
             }
 
         }

@@ -1,6 +1,7 @@
 *.suo
 *.user
 *.dbmdl
+*.connections.config
 packages
 bin
 obj
