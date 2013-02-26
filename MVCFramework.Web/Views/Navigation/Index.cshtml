@@ -2,7 +2,9 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/Layouts/Master.cshtml";
 }
+
 @section scripts{
+
     <script src="~/Scripts/underscore.min.js"></script>
     <script src="~/Scripts/backbone.min.js"></script>
     <script src="~/Scripts/Navigation/roles.js"></script>
@@ -10,13 +12,16 @@
     <script src="~/Scripts/Navigation/navigationitems.js"></script>
     <script src="~/Scripts/Navigation/navigation.js"></script>
     <script src="~/Scripts/Navigation/router.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
 }
+
 @section subheader{
     <div class="well">
         <h2>Navigation</h2>
         <p>On this page you can manage the navigation for this portal.</p>
     </div>
 }
+
 <div class="span3" id="roles-region">
 </div>
 <div class="span6" id="navigation-region">

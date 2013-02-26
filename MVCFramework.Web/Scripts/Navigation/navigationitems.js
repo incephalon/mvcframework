@@ -2,7 +2,6 @@
     model: NavigationItemModel
 });
 
-
 NavigationItemsView = Backbone.View.extend({
 
     initialize: function () {
@@ -10,10 +9,11 @@ NavigationItemsView = Backbone.View.extend({
         if (!this.collection) this.collection = new NavigationItemsCollection();
         this.collection.bind("reset", this.render, this);
         this.on("addChild", this.addChild);
+        this.on("addSibling", this.addSibling);
+        this.on("destroy", this.destroy);
     },
 
     render: function () {
-        console.log("rendering the navigation collection...");
         var $content = _.template(this.template, {});
         this.$el.html($content);
 
@@ -29,15 +29,55 @@ NavigationItemsView = Backbone.View.extend({
                 $container.append(navChildItemView.render().el);
             });
         }, this);
+
+        return this;
     },
 
-  
-
     addChild: function (navigationID, parentID) {
-        console.log('adding child to ' + parentID);
-
         var navChildModel = new NavigationItemModel({ NavigationID: navigationID, ParentID: parentID, isEditing: true });
         var navChildItemView = new NavigationItemView({ model: navChildModel, parent: this });
         this.$el.find('#navigation-item-' + parentID).after(navChildItemView.render().el);
+
+        this.collection.add(navChildModel);
+    },
+
+    addSibling: function (navigationID, siblingID) {
+        var navSiblingModel = new NavigationItemModel({ NavigationID: navigationID, isEditing: true });
+        var navSiblingItemView = new NavigationItemView({ className: "nav-header", model: navSiblingModel, parent: this });
+        this.$el.find('#navigation-item-' + siblingID).before(navSiblingItemView.render().el);
+
+        this.collection.add(navSiblingModel);
+    },
+
+    // destroys all models with the specified id and its children, also triggers their "destroyed" event
+    destroy: function (id) {
+        var children = this.collection.where({ ParentID: id });
+        var root = this.collection.get(id);
+        // if no children, remove the root (header)
+
+        if (children.length == 0) {
+            root.destroy({
+                success: function (model, response) {
+                    model.trigger("destroyed");
+                },
+                wait: true
+            });
+        } else //remove all children then the root (header)
+            while (children.length > 0) {
+                var child = children.pop();
+                child.destroy({
+                    success: function (model, response) {
+                        model.trigger("destroyed");
+                        if (children.length == 0)
+                            root.destroy({
+                                success: function (model, response) {
+                                    model.trigger("destroyed");
+                                }, wait: true
+                            });
+                    },
+                    wait: true
+                });
+            }
     }
+
 });

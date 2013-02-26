@@ -4,8 +4,9 @@ NavigationItemModel = Backbone.Model.extend({
         Text: "",
         Url: "",
         Icon: "",
-        NavigationID: 0,
+        ShowInMenu: false,
         ParentID: null,
+        NavigationID: null,
 
         isEditing: false,
     },
@@ -15,7 +16,6 @@ NavigationItemModel = Backbone.Model.extend({
     isHeader: function () {
         return this.get("ParentID") == null;
     },
-
 
     methodToUrl: {
         "create": "Navigation/CreateNavigationItem",
@@ -27,16 +27,13 @@ NavigationItemModel = Backbone.Model.extend({
     sync: function (method, model, options) {
         options = options || {};
         options.url = model.methodToUrl[method.toLowerCase()];
-        /*
-                switch (method) {
-                    case "create":
-                    case 'read':
-                    case 'update':
-                    case 'delete':
-                        options.url += '/' + this.id;
-                        break;
-                }
-                */
+
+        switch (method) {
+            case 'delete':
+                options.url += '/' + this.id;
+                break;
+        }
+
         Backbone.sync(method, model, options);
     }
 
@@ -49,17 +46,20 @@ NavigationItemView = Backbone.View.extend({
         this.template = $('#navigation-item-template').html();
         this.editTemplate = $('#navigation-item-edit-template').html();
         this.parent = options.parent;
-        this.model.bind('change', this.render, this);
+        this.model.bind("change", this.render, this);
+        this.model.bind("destroyed", this.remove, this);
+        this.on("destroy", this.destroy, this);
     },
 
     events: {
+        "click #add-nav-sibling": "addSibling",
         "click #add-nav-child": "addChild",
-        "click #move-up": "moveup",
-        "click #move-down": "movedown",
+        "click #show-in-menu": "toggleShowInMenu",
         "click #edit": "edit",
         "click #cancel": "cancel",
         "click #save": "save",
-        "click #delete": "delete"
+        "click #delete": "delete",
+        "click #preview": "preview"
     },
 
     render: function () {
@@ -74,22 +74,29 @@ NavigationItemView = Backbone.View.extend({
             $form.data("unobtrusiveValidation", null);
             $form.data("validator", null);
             $.validator.unobtrusive.parse($form);
+        } // show tooltips if this is a header
+        else if (!this.model.get("ParentID")) {
+            this.$('#add-nav-sibling').tooltip();
+            this.$('#add-nav-child').tooltip();
+            this.$('#show-in-menu').tooltip();
+            this.$('#edit').tooltip();
+            this.$('#delete').tooltip();
         }
 
         return this;
     },
 
+    addSibling: function (e) {
+        e.preventDefault();
+        this.parent.trigger("addSibling", this.model.get("NavigationID"), this.model.id);
+    },
+
     addChild: function (e) {
-        console.log("adding child...");
+        e.preventDefault();
         this.parent.trigger("addChild", this.model.get("NavigationID"), this.model.id);
-        e.preventDefault();
     },
 
-    moveup: function (e) {
-        e.preventDefault();
-    },
-
-    movedown: function (e) {
+    toggleShowInMenu: function (e) {
         e.preventDefault();
     },
 
@@ -99,6 +106,7 @@ NavigationItemView = Backbone.View.extend({
     },
 
     cancel: function (e) {
+        e.preventDefault();
         if (this.model.isNew()) {
             this.model.destroy();
             this.remove();
@@ -106,14 +114,12 @@ NavigationItemView = Backbone.View.extend({
         else {
             this.model.set({ isEditing: false });
         }
-        e.preventDefault();
     },
 
     save: function (e) {
         e.preventDefault();
 
         var $form = this.$el.find('form');
-
         if (!$form.valid())
             return;
 
@@ -129,6 +135,18 @@ NavigationItemView = Backbone.View.extend({
 
     delete: function (e) {
         e.preventDefault();
+
+        if (confirm("Are you sure you want to remove this item and its children?"))
+            this.parent.trigger("destroy", this.model.id);
+    },
+    
+    preview: function(e) {
+        e.preventDefault();
+    },
+
+    // relay a destroy message received from a parent view
+    destroy: function (id) {
+        this.parent.trigger("destroy", id);
     }
 
 });

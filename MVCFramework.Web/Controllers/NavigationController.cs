@@ -35,6 +35,7 @@ namespace MVCFramework.Web.Controllers
             return new JsonNetResult(model);
         }
 
+        [HttpPost]
         public JsonNetResult CreateNavigationItem(NavigationItemModel model)
         {
             var item = Mapper.Map<NavigationItemModel, NavigationItem>(model);
@@ -44,12 +45,20 @@ namespace MVCFramework.Web.Controllers
             return new JsonNetResult(model);
         }
 
+        [HttpPut]
         public JsonNetResult UpdateNavigationItem(NavigationItemModel model)
         {
             var item = Mapper.Map<NavigationItemModel, NavigationItem>(model);
             _navigationRepository.Update(item);
 
             return new JsonNetResult(model);
+        }
+
+        [HttpDelete]
+        public JsonNetResult DeleteNavigationItem(int id)
+        {
+            _navigationRepository.Delete(new NavigationItem { ID = id });
+            return new JsonNetResult("deleted");
         }
 
     }

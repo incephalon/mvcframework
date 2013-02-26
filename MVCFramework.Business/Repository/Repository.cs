@@ -66,13 +66,17 @@ namespace MVCFramework.Business.Repository
 
         public void Delete(T entity)
         {
+            BeginTransaction();
             _session.Delete(entity);
+            CommitTransaction();
         }
 
         public void Delete(IEnumerable<T> entities)
         {
+            BeginTransaction();
             foreach (T entity in entities)
                 _session.Delete(entity);
+            CommitTransaction();
         }
 
         public IQueryable<T> All()
