@@ -6,6 +6,8 @@
     <script src="~/Scripts/underscore.min.js"></script>
     <script src="~/Scripts/backbone.min.js"></script>
     <script src="~/Scripts/Navigation/roles.js"></script>
+    <script src="~/Scripts/Navigation/navigationitem.js"></script>
+    <script src="~/Scripts/Navigation/navigationitems.js"></script>
     <script src="~/Scripts/Navigation/navigation.js"></script>
     <script src="~/Scripts/Navigation/router.js"></script>
 }
@@ -29,6 +31,9 @@
 </script>
 <script id="navigation-template" type="text/html">
     @Html.Partial("Partials/_Navigation")
+</script>
+<script id="navigation-collection-template" type="text/html">
+    @Html.Partial("Partials/_NavigationItems")
 </script>
 <script id="navigation-item-template" type="text/html">
     @Html.Partial("Partials/_NavigationItem")

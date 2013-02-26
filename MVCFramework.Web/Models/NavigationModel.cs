@@ -4,6 +4,7 @@ namespace MVCFramework.Web.Models
 {
     public class NavigationModel
     {
+        public string Name { get; set; }
         public string Role { get; set; }
         public List<NavigationItemModel> Items { get; set; }
 
@@ -16,6 +17,7 @@ namespace MVCFramework.Web.Models
     public class NavigationItemModel
     {
         public int ID { get; set; }
+        public int NavigationID { get; set; }
         public int? ParentID { get; set; }
 
         public string Text { get; set; }

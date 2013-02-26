@@ -272,6 +272,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\Navigation\navigation.js" />
+    <Content Include="Scripts\Navigation\navigationitem.js" />
+    <Content Include="Scripts\Navigation\navigationitems.js" />
     <Content Include="Scripts\Navigation\roles.js" />
     <Content Include="Scripts\Navigation\router.js" />
     <Content Include="Scripts\underscore.js" />
@@ -309,6 +311,7 @@
     <Content Include="Views\Navigation\Partials\_Navigation.cshtml" />
     <Content Include="Views\Navigation\Partials\_NavigationItem.cshtml" />
     <Content Include="Views\Navigation\Partials\_NavigationItemEdit.cshtml" />
+    <Content Include="Views\Navigation\Partials\_NavigationItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

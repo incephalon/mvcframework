@@ -21,18 +21,18 @@ var NavigationRouter = Backbone.Router.extend({
     },
     
     index:function (role) {
-        
+        console.log("matched route index:"+role);
+
         // create views 
         this.rolesView = new RolesView({ el: '#roles-region' });
         this.navigationView = new NavigationView({ el: '#navigation-region' });
 
-        this.set_urls();
+        // this.set_urls();
         this.data_loaded = this.data_loaded || this.load_data(role);
         
         if (role) {
-            // set role
-            this.navigationView.setRole(role);
-            this.navigationView.collection.fetch();
+            this.navigationView.model.set({ Role: role }, {silent:true});
+            this.navigationView.model.fetch();
         }
     }
 
