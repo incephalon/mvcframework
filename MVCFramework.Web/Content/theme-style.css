@@ -32,7 +32,7 @@
   box-sizing: border-box;
 }
 html {
-  background-color: #ededed;
+  /*background-color: #ededed;*/
   background-image: -moz-linear-gradient(top, #e0e0e0, #ffffff);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#e0e0e0), to(#ffffff));
   background-image: -webkit-linear-gradient(top, #e0e0e0, #ffffff);
