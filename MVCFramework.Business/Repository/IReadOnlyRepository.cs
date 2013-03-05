@@ -9,5 +9,8 @@ namespace MVCFramework.Business.Repository
         IQueryable<TEntity> All();
         TEntity FindBy(Expression<Func<TEntity, bool>> expression);
         IQueryable<TEntity> FilterBy(Expression<Func<TEntity, bool>>  expression);
+
+        void BeginTransaction();
+        void CommitTransaction();
     }
 }

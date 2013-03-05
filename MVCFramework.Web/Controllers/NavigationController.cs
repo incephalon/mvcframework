@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Transactions;
+using AutoMapper;
 using MVCFramework.Business.Repository;
 using MVCFramework.Model.Entities;
 using MVCFramework.Web.Helpers;
 using MVCFramework.Web.Infrastructure;
 using MVCFramework.Web.Models;
-using Ninject;
 using System.Web.Mvc;
 
 namespace MVCFramework.Web.Controllers
@@ -16,7 +16,7 @@ namespace MVCFramework.Web.Controllers
 
         public NavigationController(IKeyedRepository<int, NavigationItem> navigationRepository)
         {
-            this._navigationRepository = navigationRepository;
+            _navigationRepository = navigationRepository;
         }
         //
         // GET: /Navigation/
@@ -39,7 +39,27 @@ namespace MVCFramework.Web.Controllers
         public JsonNetResult CreateNavigationItem(NavigationItemModel model)
         {
             var item = Mapper.Map<NavigationItemModel, NavigationItem>(model);
-            _navigationRepository.Insert(item);
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                _navigationRepository.BeginTransaction();
+                var unordered = _navigationRepository.FilterBy(
+                        ni =>
+                        ni.Navigation.ID == model.NavigationID && ni.Order >= model.Order &&
+                        ni.ParentItem.ID == model.ParentID);
+              
+                if (unordered != null)
+                    foreach (var uitem in unordered)
+                        uitem.Order++;
+
+                _navigationRepository.CommitTransaction();
+
+                _navigationRepository.Update(unordered);
+                _navigationRepository.Insert(item);
+
+                ts.Complete();
+            }
+
             Mapper.Map(item, model);
 
             return new JsonNetResult(model);
@@ -57,7 +77,30 @@ namespace MVCFramework.Web.Controllers
         [HttpDelete]
         public JsonNetResult DeleteNavigationItem(int id)
         {
-            _navigationRepository.Delete(new NavigationItem { ID = id });
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var item = _navigationRepository.FindByID(id);
+                var model = Mapper.Map<NavigationItem, NavigationItemModel>(item);
+
+                _navigationRepository.BeginTransaction();
+                var unordered = _navigationRepository.FilterBy(
+                       ni =>
+                       ni.Navigation.ID == model.NavigationID && ni.Order > model.Order &&
+                       ni.ParentItem.ID == model.ParentID);
+
+                if (unordered != null)
+                    foreach (var uitem in unordered)
+                        uitem.Order--;
+
+                _navigationRepository.CommitTransaction();
+
+                _navigationRepository.Update(unordered);
+                _navigationRepository.Delete(item);
+
+                ts.Complete();
+            }
+            
             return new JsonNetResult("deleted");
         }
 

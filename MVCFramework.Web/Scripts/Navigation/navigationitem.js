@@ -7,6 +7,7 @@ NavigationItemModel = Backbone.Model.extend({
         ShowInMenu: false,
         ParentID: null,
         NavigationID: null,
+        Order: 0,
 
         isEditing: false,
     },
@@ -38,6 +39,16 @@ NavigationItemModel = Backbone.Model.extend({
     }
 
 });
+var events = {
+    "click #add-nav-sibling": "onAddSibling",
+    "click #add-nav-child": "onAddChild",
+    "click #show-in-menu": "onToggleShowInMenu",
+    "click #edit": "onEdit",
+    "click #cancel": "onCancel",
+    "click #save": "onSave",
+    "click #delete": "onDelete",
+    "click #preview": "onPreview"
+};
 
 NavigationItemView = Backbone.View.extend({
     tagName: "li",
@@ -45,21 +56,19 @@ NavigationItemView = Backbone.View.extend({
     initialize: function (options) {
         this.template = $('#navigation-item-template').html();
         this.editTemplate = $('#navigation-item-edit-template').html();
+
         this.parent = options.parent;
+
         this.model.bind("change", this.render, this);
         this.model.bind("destroyed", this.remove, this);
+
         this.on("destroy", this.destroy, this);
     },
-
-    events: {
-        "click #add-nav-sibling": "addSibling",
-        "click #add-nav-child": "addChild",
-        "click #show-in-menu": "toggleShowInMenu",
-        "click #edit": "edit",
-        "click #cancel": "cancel",
-        "click #save": "save",
-        "click #delete": "delete",
-        "click #preview": "preview"
+    get events() {
+        return events;
+    },
+    set events(value) {
+        events = value;
     },
 
     render: function () {
@@ -74,38 +83,62 @@ NavigationItemView = Backbone.View.extend({
             $form.data("unobtrusiveValidation", null);
             $form.data("validator", null);
             $.validator.unobtrusive.parse($form);
-        } // show tooltips if this is a header
-        else if (!this.model.get("ParentID")) {
-            this.$('#add-nav-sibling').tooltip();
-            this.$('#add-nav-child').tooltip();
-            this.$('#show-in-menu').tooltip();
-            this.$('#edit').tooltip();
-            this.$('#delete').tooltip();
+        }
+
+        // render children if any
+        if (this.collection && this.collection.where({ ParentID: this.model.id }).length > 0) {
+            var $container = this.$("#navigation-items-container");
+            var self = this;
+            _.each(this.collection.where({ ParentID: this.model.id }), function (item) {
+                var navChildItemView = new NavigationItemView({ model: item, parent: self });
+                $container.append(navChildItemView.render().el);
+            });
+
+            $container.sortable({
+                stop: function (evt, ui) {
+                    console.log($(ui.item).index());
+                }
+            });
         }
 
         return this;
     },
 
-    addSibling: function (e) {
+    onAddSibling: function (e) {
         e.preventDefault();
-        this.parent.trigger("addSibling", this.model.get("NavigationID"), this.model.id);
+        this.parent.trigger("addSibling", this.model.get("NavigationID"), this.model.id, this.model.get("Order"));
     },
 
-    addChild: function (e) {
+    onAddChild: function (e) {
         e.preventDefault();
-        this.parent.trigger("addChild", this.model.get("NavigationID"), this.model.id);
+        var navChildModel = new NavigationItemModel({ NavigationID: this.model.get("NavigationID"), ParentID: this.model.id, Order: 1, isEditing: true });
+        var navChildItemView = new NavigationItemView({ model: navChildModel, parent: this });
+        var $container = this.$('#navigation-items-container');
+        $container.prepend(navChildItemView.render().el);
+
+        // increase order number for all greater siblings
+        _.each(
+           _.filter(this.collection.models, function (item) { return item.get("ParentID") == this.model.id; }, this),
+            function (model) {
+                model.set({ Order: model.get("Order") + 1 });
+            }, this);
+
+        this.collection.add(navChildModel);
     },
 
-    toggleShowInMenu: function (e) {
+    onToggleShowInMenu: function (e) {
         e.preventDefault();
+
+        this.model.set({ ShowInMenu: !this.model.get("ShowInMenu") });
+        this.model.save();
     },
 
-    edit: function (e) {
+    onEdit: function (e) {
         this.model.set({ isEditing: true });
         e.preventDefault();
     },
 
-    cancel: function (e) {
+    onCancel: function (e) {
         e.preventDefault();
         if (this.model.isNew()) {
             this.model.destroy();
@@ -116,7 +149,7 @@ NavigationItemView = Backbone.View.extend({
         }
     },
 
-    save: function (e) {
+    onSave: function (e) {
         e.preventDefault();
 
         var $form = this.$el.find('form');
@@ -133,14 +166,16 @@ NavigationItemView = Backbone.View.extend({
         this.model.save();
     },
 
-    delete: function (e) {
+    onDelete: function (e) {
         e.preventDefault();
 
         if (confirm("Are you sure you want to remove this item and its children?"))
             this.parent.trigger("destroy", this.model.id);
+
+        e.stopPropagation();
     },
-    
-    preview: function(e) {
+
+    onPreview: function (e) {
         e.preventDefault();
     },
 

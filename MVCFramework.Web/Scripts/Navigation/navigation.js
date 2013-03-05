@@ -25,13 +25,17 @@ NavigationView = Backbone.View.extend({
     },
 
     render: function () {
+        
+
         var $content = _.template(this.template, this.model.toJSON());
         this.$el.html($content);
 
         // render the items collection
+        this.itemsView =
         new NavigationItemsView({
             el: "#navigation-container",
-            collection: new NavigationItemsCollection(this.model.get("Items"))
+            collection: new NavigationItemsCollection(this.model.get("Items")),
+            parent: this
         }).render();
     }
 

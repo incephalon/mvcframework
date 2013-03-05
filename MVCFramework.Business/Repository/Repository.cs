@@ -57,6 +57,14 @@ namespace MVCFramework.Business.Repository
             CommitTransaction();
         }
 
+        public void Update(IEnumerable<T> items)
+        {
+            BeginTransaction();
+            foreach (T item in items)
+                _session.Update(item);
+            CommitTransaction();
+        }
+
         public void Save(T entity)
         {
             BeginTransaction();
