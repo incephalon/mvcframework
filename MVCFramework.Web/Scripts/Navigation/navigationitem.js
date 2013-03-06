@@ -62,7 +62,9 @@ NavigationItemView = Backbone.View.extend({
         this.model.bind("change", this.render, this);
         this.model.bind("destroyed", this.remove, this);
 
+        // bubble up events
         this.on("destroy", this.destroy, this);
+        this.on("sorted", this.sorted, this);
     },
     get events() {
         return events;
@@ -86,20 +88,23 @@ NavigationItemView = Backbone.View.extend({
         }
 
         // render children if any
+        var $container = this.$("#navigation-items-container");
         if (this.collection && this.collection.where({ ParentID: this.model.id }).length > 0) {
-            var $container = this.$("#navigation-items-container");
             var self = this;
             _.each(this.collection.where({ ParentID: this.model.id }), function (item) {
                 var navChildItemView = new NavigationItemView({ model: item, parent: self });
                 $container.append(navChildItemView.render().el);
             });
-
-            $container.sortable({
-                stop: function (evt, ui) {
-                    console.log($(ui.item).index());
-                }
-            });
         }
+
+        $container.sortable({
+            helper: "clone",
+            update: _.bind(function (evt, ui) {
+                var id = $(ui.item).attr('id').match(/[\d]+$/)[0];
+                var position = $(ui.item).index();
+                this.parent.trigger("sorted", id, position);
+            }, this)
+        });
 
         return this;
     },
@@ -115,6 +120,7 @@ NavigationItemView = Backbone.View.extend({
         var navChildItemView = new NavigationItemView({ model: navChildModel, parent: this });
         var $container = this.$('#navigation-items-container');
         $container.prepend(navChildItemView.render().el);
+        $container.sortable("refresh");
 
         // increase order number for all greater siblings
         _.each(
@@ -179,9 +185,14 @@ NavigationItemView = Backbone.View.extend({
         e.preventDefault();
     },
 
-    // relay a destroy message received from a parent view
+    // bubble up destroy message
     destroy: function (id) {
         this.parent.trigger("destroy", id);
+    },
+
+    // bubble up sorted message
+    sorted: function (id, position) {
+        this.parent.trigger("sorted", id, position);
     }
 
 });

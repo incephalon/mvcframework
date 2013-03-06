@@ -1,6 +1,8 @@
 ﻿RoleModel = Backbone.Model.extend({
-    Name: "",
-    Title: ""
+    defaults: {
+        Name: "",
+        isActive: false
+    }
 });
 
 RolesCollection = Backbone.Collection.extend({
@@ -17,18 +19,22 @@ RoleView = Backbone.View.extend({
     },
 
     events: {
-        "click a": "navigate"  
+        "click a": "navigate"
     },
-    
+
     render: function () {
         var $content = _.template(this.template, this.model.toJSON());
         this.$el.html($content);
 
+        if (this.model.get("isActive"))
+            this.$el.addClass("active");
+        else this.$el.removeClass("active");
+
         return this;
     },
-    
-    navigate: function(e) {
-        window.router.navigate("role/" + this.model.get("Title"), true);
+
+    navigate: function (e) {
+        window.router.navigate("role/" + this.model.get("Name"), true);
         e.preventDefault();
     }
 
@@ -46,14 +52,20 @@ RolesView = Backbone.View.extend({
     render: function () {
         var $content = _.template(this.template, {});
         this.$el.html($content);
-        
-        console.log("rendering roles collection...");
-        
         var $container = this.$('#roles-container');
-    
+
         this.collection.each(function (role) {
             var roleView = new RoleView({ model: role, parent: this });
             $container.append(roleView.render().el);
+        });
+    },
+
+    setActive: function (role) {
+        _.each(this.collection.models, function (model) {
+            if (model.get("Name") == role)
+                model.set({ isActive: true });
+            else
+                model.set({ isActive: false });
         });
     }
 

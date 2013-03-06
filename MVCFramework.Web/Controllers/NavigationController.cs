@@ -47,14 +47,15 @@ namespace MVCFramework.Web.Controllers
                         ni =>
                         ni.Navigation.ID == model.NavigationID && ni.Order >= model.Order &&
                         ni.ParentItem.ID == model.ParentID);
-              
+
                 if (unordered != null)
                     foreach (var uitem in unordered)
                         uitem.Order++;
 
                 _navigationRepository.CommitTransaction();
 
-                _navigationRepository.Update(unordered);
+                if (unordered != null)
+                    _navigationRepository.Update(unordered);
                 _navigationRepository.Insert(item);
 
                 ts.Complete();
@@ -68,8 +69,54 @@ namespace MVCFramework.Web.Controllers
         [HttpPut]
         public JsonNetResult UpdateNavigationItem(NavigationItemModel model)
         {
-            var item = Mapper.Map<NavigationItemModel, NavigationItem>(model);
-            _navigationRepository.Update(item);
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var item = _navigationRepository.FindByID(model.ID);
+                int oldOrder = item.Order;
+                int newOrder = model.Order;
+
+
+                dynamic unordered = null;
+
+                // if order has changed, update order for items in between
+                _navigationRepository.BeginTransaction();
+                if (newOrder < oldOrder) // order decreased
+                {
+                    unordered = _navigationRepository.FilterBy(
+                        ni =>
+                        ni.Navigation.ID == model.NavigationID &&
+                        ni.ParentItem.ID == model.ParentID &&
+                        ni.Order >= newOrder && ni.Order < oldOrder
+                        );
+
+                    if (unordered != null)
+                        foreach (var uitem in unordered)
+                            uitem.Order++;
+                }
+                else if (newOrder > oldOrder) // order increased
+                {
+                    unordered = _navigationRepository.FilterBy(
+                        ni =>
+                        ni.Navigation.ID == model.NavigationID &&
+                        ni.ParentItem.ID == model.ParentID &&
+                        ni.Order > oldOrder && ni.Order <= newOrder
+                        );
+
+                    if (unordered != null)
+                        foreach (var uitem in unordered)
+                            uitem.Order--;
+                }
+                _navigationRepository.CommitTransaction();
+
+                if (unordered != null)
+                    _navigationRepository.Update(unordered);
+
+                Mapper.Map(model, item);
+                _navigationRepository.Update(item);
+
+                ts.Complete();
+            }
 
             return new JsonNetResult(model);
         }
@@ -83,6 +130,16 @@ namespace MVCFramework.Web.Controllers
                 var item = _navigationRepository.FindByID(id);
                 var model = Mapper.Map<NavigationItem, NavigationItemModel>(item);
 
+                // delete children
+                _navigationRepository.BeginTransaction();
+                var children = _navigationRepository.FilterBy(
+                    ni =>
+                        ni.ParentItem.ID == model.ID);
+                _navigationRepository.CommitTransaction();
+
+                _navigationRepository.Delete(children);
+
+                // update siblings order
                 _navigationRepository.BeginTransaction();
                 var unordered = _navigationRepository.FilterBy(
                        ni =>
@@ -95,12 +152,15 @@ namespace MVCFramework.Web.Controllers
 
                 _navigationRepository.CommitTransaction();
 
-                _navigationRepository.Update(unordered);
+                if (unordered != null)
+                    _navigationRepository.Update(unordered);
+
+                // delete item
                 _navigationRepository.Delete(item);
 
                 ts.Complete();
             }
-            
+
             return new JsonNetResult("deleted");
         }
 

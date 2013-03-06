@@ -22,7 +22,7 @@ input.input-validation-error {
 /* Custom fonts */
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "pt-sans-narrow";
+    font-family: 'PT Sans Narrow', sans-serif;
 }
 
 /* Fix for font awesome icons in nav header */
@@ -32,4 +32,12 @@ h1, h2, h3, h4, h5, h6 {
 
 input.input-short[type="text"] {
     height: 13px;
+}
+
+.nav-inner {
+    padding-right: 15px;
+    margin-bottom: 0;
+    text-transform: none;
+    font-size: 13px;
+    font-weight: normal;
 }

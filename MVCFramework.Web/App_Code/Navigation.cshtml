@@ -5,13 +5,15 @@
         @{ 
             foreach (var item in navigation.Items.Where(i => i.ParentID == null).OrderBy(i => i.Order))
             {
-           
-            @RenderNavigationItem(item, Url)
-            foreach (var subitem in navigation.Items.Where(si => si.ParentID != null && si.ParentID == item.ID))
-            {
-                @RenderNavigationItem(subitem, Url)
-            }
-            
+                if (item.ShowInMenu)
+                {
+                    @RenderNavigationItem(item, Url)
+                    foreach (var subitem in navigation.Items.Where(si => si.ParentID == item.ID).OrderBy(si => si.Order))
+                    {
+                        @RenderNavigationItem(subitem, Url)
+                    }
+                }
+
             }
         }
     </ul>

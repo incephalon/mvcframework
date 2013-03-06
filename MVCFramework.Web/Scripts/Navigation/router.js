@@ -7,8 +7,13 @@ var NavigationRouter = Backbone.Router.extend({
 
     load_data: function (role) {
         // fetch models and collections
-        this.rolesView.collection.fetch();
-        
+        this.rolesView = new RolesView({ el: '#roles-region' });
+        this.rolesView.collection.fetch({
+            success: function () {
+                window.router.rolesView.setActive(role);
+            }
+        });
+
         return true;
     },
 
@@ -19,19 +24,18 @@ var NavigationRouter = Backbone.Router.extend({
         "": "index",
         "role/:role": "index"
     },
-    
-    index:function (role) {
-        console.log("matched route index:"+role);
 
+    index: function (role) {
         // create views 
-        this.rolesView = new RolesView({ el: '#roles-region' });
+
         this.navigationView = new NavigationView({ el: '#navigation-region' });
 
         // this.set_urls();
         this.data_loaded = this.data_loaded || this.load_data(role);
-        
+
         if (role) {
-            this.navigationView.model.set({ Role: role }, {silent:true});
+            this.rolesView.setActive(role);
+            this.navigationView.model.set({ Role: role }, { silent: true });
             this.navigationView.model.fetch();
         }
     }

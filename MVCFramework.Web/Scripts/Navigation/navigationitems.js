@@ -30,6 +30,7 @@ NavigationItemsView = Backbone.View.extend({
         this.collection.bind("add", this.itemAdded, this);
         this.collection.bind("remove", this.itemRemoved, this);
 
+        this.on("sorted", this.itemSorted);
         this.on("addSibling", this.addSibling);
         this.on("destroy", this.destroy);
     },
@@ -54,12 +55,15 @@ NavigationItemsView = Backbone.View.extend({
                 $container.append(navRootItemView.render().el);
             }, this);
         }
-        
+       
         this.$el.sortable({
-            items: ".nav-list>li",
-            stop: function (evt, ui) {
-                console.log($(ui.item).index());
-            }
+            items: ">ul.nav-list>li",
+            helper: "clone",
+            update: _.bind(function (evt, ui) {
+                var id = $(ui.item).attr('id').match(/[\d]+$/)[0];
+                var position = $(ui.item).index();
+                this.trigger("sorted", id, position);
+            }, this)
         });
 
         return this;
@@ -86,32 +90,26 @@ NavigationItemsView = Backbone.View.extend({
             });
 
         this.collection.add(navSiblingModel);
-
     },
 
     // destroys all models with the specified id and its children, also triggers their "destroyed" event
     destroy: function (id) {
-        var children = this.collection.where({ ParentID: id });
-        var root = this.collection.get(id);
-        // if no children, remove the root (header)
 
-        if (children.length == 0) {
-            root.destroy({
-                success: function (model, response) {
-                    model.trigger("destroyed");
-                },
-                wait: true
-            });
-        } else //remove all children then the root (header)
-            while (children.length > 0) {
-                var child = children.pop();
-                child.destroy({
-                    success: function (model, response) {
-                        model.trigger("destroyed");
-                    },
-                    wait: true
-                });
-            }
+        var root = this.collection.get(id);
+
+        // remove children
+        _.each(this.collection.where({ ParentID: id }), function (child) {
+            child.trigger("destroy", child, child.collection);
+        });
+
+        // remove item
+        root.destroy({
+            success: function (model, response) {
+                model.trigger("destroyed");
+            },
+            wait: true
+        });
+   
     },
 
     itemAdded: function (model) {
@@ -129,6 +127,37 @@ NavigationItemsView = Backbone.View.extend({
 
         if (this.collection.length == 0)
             this.$('#no-items').show();
+    },
+
+    itemSorted: function (id, position) {
+        var model = this.collection.get(id);
+        var order = position + 1; // order starts from 1
+
+
+        // set order for models in between
+        var unordered = _.filter(this.collection.models, function (item) {
+            var itemOrder = item.get("Order");
+            var hasSameParent = item.get("ParentID") == model.get("ParentID");
+
+            if (order < model.get("Order")) // order decreased
+                return hasSameParent && itemOrder >= order && itemOrder < model.get("Order");
+            else if (order > model.get("Order")) // order increased
+                return hasSameParent && itemOrder > model.get("Order") && itemOrder <= order;
+            else return false;
+        });
+
+        if (order < model.get("Order")) // order decreased
+            _.each(unordered, function (item) {
+                item.set({ Order: item.get("Order") + 1 });
+            });
+        else _.each(unordered, function (item) {
+            item.set({ Order: item.get("Order") - 1 });
+        });
+
+        model.set({ Order: order });
+        model.save();
+
+        // console.log("item sorted: ", id, " ", position);
     }
 
 });

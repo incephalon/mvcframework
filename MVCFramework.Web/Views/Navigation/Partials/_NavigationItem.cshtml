@@ -1,14 +1,16 @@
-﻿<a id="preview" href="#"><i class="<%=Icon%>"></i><%= Text %> 
+﻿<a id="preview" href="#" title="<%=Url%>">
+<i class="<%=Icon%>"></i><%= Text %>
+
+
     <i id="delete" class="icon-minus-sign pull-right" title="delete"></i>
     <i id="edit" class="icon-edit pull-right" title="edit"></i>
     <i id="show-in-menu" class="<% if(ShowInMenu){ %>icon-eye-open<%}else{%>icon-eye-close<%}%> pull-right" title="show in menu"></i>
     <% if(ParentID==null) { %> 
     <i id="add-nav-child" class="icon-plus-sign pull-right" title="add child"></i>
     <i id="add-nav-sibling" class="icon-plus-sign-alt pull-right" title="add sibling"></i>
-    <% } %>
-</a>
+<% } %>
+    </a>
 <% if (!ParentID) { %>
-<ul id="navigation-items-container" class="nav nav-stacked" style="padding-right: 15px; margin-bottom: 0">
-  
+<ul id="navigation-items-container" class="nav nav-list nav-inner">
 </ul>
 <% } %>

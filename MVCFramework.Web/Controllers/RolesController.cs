@@ -16,14 +16,13 @@ namespace MVCFramework.Web.Controllers
                                  {
                                      new RoleModel()
                                          {
-                                             Title = "anonymous"
+                                             Name = "anonymous"
                                          }
                                  };
 
             roleModels.AddRange(Roles.GetAllRoles().Select(r => new RoleModel()
                                                                        {
                                                                            Name = r,
-                                                                           Title = r
                                                                        }));
 
             return new JsonNetResult(roleModels);
