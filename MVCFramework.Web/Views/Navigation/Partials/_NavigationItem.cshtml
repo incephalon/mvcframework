@@ -1,7 +1,6 @@
 ﻿<a id="preview" href="#" title="<%=Url%>">
-<i class="<%=Icon%>"></i><%= Text %>
-
-
+    <i class="<%=Icon%>"></i>
+    <span class="<%= (!Url || Url.length==0)? "muted" : "" %>"><%= Text %></span>
     <i id="delete" class="icon-minus-sign pull-right" title="delete"></i>
     <i id="edit" class="icon-edit pull-right" title="edit"></i>
     <i id="show-in-menu" class="<% if(ShowInMenu){ %>icon-eye-open<%}else{%>icon-eye-close<%}%> pull-right" title="show in menu"></i>

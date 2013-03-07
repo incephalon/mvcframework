@@ -26,10 +26,12 @@ RoleView = Backbone.View.extend({
         var $content = _.template(this.template, this.model.toJSON());
         this.$el.html($content);
 
+        /*
         if (this.model.get("isActive"))
             this.$el.addClass("active");
         else this.$el.removeClass("active");
-
+        */
+        
         return this;
     },
 
